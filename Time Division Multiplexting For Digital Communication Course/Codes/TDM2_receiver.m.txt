@@ -1,0 +1,347 @@
+amplitude = 4;
+sampling_rate = 20; 
+update_interval = 0.2; 
+time_window = 5; 
+subplot(811);
+h = plot(0, 0);
+xlabel('Time (s)')
+ylabel('Amplitude')
+title(' Random Signal')
+ylim([-amplitude, amplitude])
+xlim([0, time_window]);
+nn=input('Set The Time: ')
+
+while true
+    signal_new = (amplitude-2) * randn(1);
+    signal_data = get(h, 'YData');
+    signal_data = [signal_data, signal_new];
+    t_data = linspace(0, length(signal_data) / sampling_rate, length(signal_data));
+    set(h, 'XData', t_data, 'YData', signal_data);
+   if (length(signal_data)/sampling_rate)==nn;
+       break
+   end
+    xlim([max(0, t_data(end) - time_window), t_data(end)]);
+  ylim([-amplitude, amplitude])
+    pause(update_interval/10);
+end
+N=length(signal_data);
+v=fft(signal_data);
+f=(0:N-1)*(sampling_rate/N);
+% % % subplot(712);
+% % % stem(f,abs(v));
+% % % xlabel('frequancy (HZ)')
+% % % ylabel('Magnitude')
+% % % title(' Random Signal in freq domain')
+% % % grid on;
+% % % xlim([0,nn]);
+
+cutoff_freq = nn/2;
+v_filtered = v .* (f <= cutoff_freq);
+% % % subplot(7,1,3);
+% % % stem(f, abs(v_filtered));
+% % % xlabel('Frequency (Hz)');
+% % % ylabel('Magnitude');
+% % % title('Filtered Signal in Frequency Domain');
+% % % grid on;
+% % % xlim([0,nn]);
+
+ random_signal_filtered = ifft(v_filtered);
+% % %  subplot(7,1,4);
+% % % plot(t_data, real(random_signal_filtered)); 
+% % % xlabel('Time (s)');
+% % % ylabel('Amplitude');
+% % % title('Filtered Signal in Time Domain');
+% % % grid on;
+% % % xlim([0,nn]);
+% % % % % % % % % % % % 
+
+pulse_period = 1; 
+% n=input('Enter num_pulses:');
+num_pulses = nn;
+t = linspace(0, num_pulses*pulse_period, 1000*num_pulses);
+pulse_width = 0.1;  
+
+pulse_train = zeros(size(t));
+for i = 1:num_pulses
+    pulse_train = pulse_train + (mod(t, pulse_period) >= (i-1)*pulse_period & mod(t, pulse_period) < (i-1)*pulse_period + pulse_width);
+    
+end
+% % % subplot(812);
+% % % plot(t, pulse_train,'r'); 
+% % % title('Train of Pulses');
+% % % xlabel('Time (s)');
+% % % ylabel('Amplitude');
+% % % ylim([0,2])
+% % % xlim([0,nn]);
+% % % % % % % % % 
+subplot(812);
+PAM1 = interp1(t_data,signal_data, t) .* pulse_train; 
+plot(t, PAM1);
+xlim([0,nn]);
+title('PAM SIGNAL');
+xlabel('Time (s)');
+ylabel('Amplitude')
+% % % % % % % % % % % % % % 
+% % % % % % % %%%%%%%%%
+input_values = 0.05:nn+1;
+interpolated_y = interp1(t, PAM1, input_values);
+disp('Input Values (x):');
+disp(input_values);
+disp('Interpolated Y-values:');
+disp(interpolated_y);
+% % % % % % % % % % % % % % 
+sz = size(interpolated_y);
+tt = 0:(sz(2)-1);
+pulse_width1 = 0.1;  
+pulse_period1 = 1;    
+num_pulses1 = nn; 
+ty = linspace(0, num_pulses1*pulse_period1, 1000*num_pulses1);   
+
+
+pulse_train1 = zeros(size(ty));
+for i = 1:num_pulses1
+    pulse_train1 = pulse_train1 + (mod(ty, pulse_period1) >= (i-1)*pulse_period1 & mod(ty, pulse_period1) < (i-1)*pulse_period1 + pulse_width1);
+end
+subplot(813);
+u = interp1(tt, interpolated_y, ty, 'previous').*pulse_train1;
+plot(ty,u);
+xlim([0,nn]);
+ylim([-5,5])
+title('Flat Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+% % % % % % % % % % % % % % % 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+amplitudee = 4;
+sampling_ratee = 20; 
+update_intervale = 0.2; 
+time_window2 = 5; 
+subplot(814);
+h2 = plot(0, 0);
+xlabel('Time (s)')
+ylabel('Amplitude')
+title(' Random Signal 2')
+ylim([-amplitudee, amplitudee])
+xlim([0, time_window2]);
+nn2=input('Set The Time 2: ')
+
+while true
+    signal_new2 = (amplitudee-2) * randn(1);
+    signal_data2 = get(h2, 'YData');
+    signal_data2 = [signal_data2, signal_new2];
+    t_data2 = linspace(0, length(signal_data2) / sampling_ratee, length(signal_data2));
+    set(h2, 'XData', t_data2, 'YData', signal_data2);
+   if (length(signal_data2)/sampling_ratee)==nn2;
+       break
+   end
+    xlim([max(0, t_data2(end) - time_window2), t_data2(end)]);
+  ylim([-amplitudee, amplitudee])
+    pause(update_intervale/10);
+end
+N2=length(signal_data2);
+v2=fft(signal_data2);
+f2=(0:N2-1)*(sampling_ratee/N2);
+% % % subplot(712);
+% % % stem(f2,abs(v2));
+% % % xlabel('frequancy (HZ)')
+% % % ylabel('Magnitude')
+% % % title(' Random Signal in freq domain2')
+% % % grid on;
+% % % xlim([0,nn2]);
+
+cutoff_freq2 = nn2/2;
+v_filtered2 = v2 .* (f2 <= cutoff_freq2);
+% % % subplot(7,1,3);
+% % % stem(f2, abs(v_filtered2));
+% % % xlabel('Frequency (Hz)');
+% % % ylabel('Magnitude');
+% % % title('Filtered Signal in Frequency Domain 2');
+% % % grid on;
+% % % xlim([0,nn2]);
+
+random_signal_filtered2 = ifft(v_filtered2);
+% % % subplot(7,1,4);
+% % % plot(t_data2, real(random_signal_filtered2));
+% % % xlabel('Time (s)');
+% % % ylabel('Amplitude');
+% % % title('Filtered Signal in Time Domain 2');
+% % % grid on;
+% % % xlim([0,nn2]);
+% % % % % % % % % % % % 
+
+pulse_period2 = 1; 
+num_pulses2 = nn2;
+t2 = linspace(0, num_pulses2*pulse_period2, 1000*num_pulses2);
+pulse_width2 = 0.1;  
+
+pulse_train2 = zeros(size(t2));
+for i = 1:num_pulses2
+    pulse_train2 = pulse_train2 + (mod(t2, pulse_period2) >= (i-1)*pulse_period2 & mod(t2, pulse_period2) < (i-1)*pulse_period2 + pulse_width2);
+    
+end
+% % % subplot(7,1,5);
+% % % plot(t2, pulse_train2,'r'); 
+% % % title('Train of Pulses 2');
+% % % xlabel('Time (s)');
+% % % ylabel('Amplitude');
+% % % ylim([0,2])
+% % % xlim([0,nn2]);
+% % % % % % % % % 
+subplot(815);
+PAM2 = interp1(t_data2,signal_data2, t2) .* pulse_train2; 
+plot(t2, PAM2);
+xlim([0,nn2]);
+title('PAM SIGNAL 2');
+xlabel('Time (s)');
+ylabel('Amplitude')
+% % % % % % % % % % % % % % 
+% % % % % % % %%%%%%%%%
+input_values2 = 0.05:nn2+1;
+interpolated_y2 = interp1(t2, PAM2, input_values2);
+disp('Input Values 2 (x):');
+disp(input_values2);
+disp('Interpolated Y-values 2:');
+disp(interpolated_y2);
+% % % % % % % % % % % % % % 
+sz2 = size(interpolated_y2);
+tt2 = 0:(sz2(2)-1);
+pulse_width3 = 0.1;  
+pulse_period3 = 1;    
+num_pulses3 = nn2; 
+ty3 = linspace(0, num_pulses3*pulse_period3, 1000*num_pulses3);   
+
+
+pulse_train3 = zeros(size(ty3));
+for i = 1:num_pulses3
+    pulse_train3 = pulse_train3 + (mod(ty3, pulse_period3) >= (i-1)*pulse_period3 & mod(ty3, pulse_period3) < (i-1)*pulse_period3 + pulse_width3);
+end
+subplot(816);
+u3 = interp1(tt2, interpolated_y2, ty3, 'previous').*pulse_train3;
+plot(ty3,u3);
+xlim([0,nn2]);
+ylim([-5,5])
+title('Flat Signal 2');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+% % % % % % % % % % % % % % % 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% time shift 
+subplot(817);
+tg=0.2;
+shifted_x = t2 + tg + pulse_width3;  
+shifted_x = [zeros(1, 400), u3(1:end-400)];  % Create a signal with 0 amplitude before 0.5 units of time
+plot(t2, shifted_x,'r');
+title('Shifted flat Signal2');
+%%%%%%%%%%%%%%%%
+subplot(818);
+
+max_length = max(length(shifted_x), length(u));
+max_length1 = max(length(u), length(shifted_x));
+shifted_x_padded = [shifted_x, zeros(1, max_length - length(shifted_x))];
+u_padded = [u, zeros(1, max_length - length(u))];
+shifted_x_padded1 = [shifted_x, zeros(1, max_length1 - length(shifted_x))];
+u_padded1 = [u, zeros(1, max_length1 - length(u))];
+tDM=shifted_x_padded1+ u_padded1;
+% tDM=shifted_x_padded+ u_padded;
+
+
+plot(t2,tDM);
+title('TDM')
+% % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % 
+tb=0.1;
+tg=0.3;
+n_1=tb/2:nn;
+
+[input_values_TDM3] = [n_1];
+interpolated_TDM = interp1(t2, tDM, [input_values_TDM3]);
+disp('Input Values TDM:');
+vv=input_values_TDM3;
+disp(input_values_TDM3);
+disp('Interpolated TDM:');
+vvv=interpolated_TDM;
+disp(interpolated_TDM);
+% % % % % % % % % % % % % 
+
+figure;
+size4 = size(vvv);
+tt33 = 0:size4(2)-1;
+pulse_width33 = 0.1;  
+pulse_period33 = 1;    
+num_pulses33 = nn; 
+nn4 = linspace(0, num_pulses33*pulse_period33, 1000*num_pulses33);   
+
+
+pulse_train33 = zeros(size(nn4));
+for i = 1:num_pulses33
+    pulse_train33 = pulse_train33 + (mod(nn4, pulse_period33) >= (i-1)*pulse_period33 & mod(nn4, pulse_period33) < (i-1)*pulse_period33 + pulse_width33);
+end
+subplot(411);
+re_pam1 = interp1(tt33, vvv, nn4, 'previous').*pulse_train33;
+plot(nn4,re_pam1);
+title('re pam 1');
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % %
+n_2=(tb+tg+tb/2):nn;
+[input_values_TDM44] = [n_2];
+interpolated_TDM4 = interp1(t2, tDM, [input_values_TDM44]);
+disp('Input Values TDM:');
+ 
+disp(input_values_TDM44);
+disp('Interpolated TDM:');
+vvv1=interpolated_TDM4;
+disp(interpolated_TDM4);
+% % % % % % % % % % % % 
+
+
+size44 = size(vvv1);
+tt44 = 0:(size44(2)-1);
+pulse_width44 = 0.1;  
+pulse_period44 = 1;    
+num_pulses44 = nn2; 
+nn44 = linspace(0, num_pulses44*pulse_period44, 1000*num_pulses44);   
+
+
+pulse_train44 = zeros(size(nn44));
+for i = 1:num_pulses44
+    pulse_train44 = pulse_train44 + (mod(nn44, pulse_period44) >= (i-1)*pulse_period44 & mod(nn44, pulse_period44) < (i-1)*pulse_period44 + pulse_width44);
+end
+subplot(412);
+re_pam2 = interp1(tt44, vvv1, nn44, 'previous').*pulse_train44;
+plot(nn44,re_pam2);
+title('re pam 2');
+
+
+% Assuming re_pam1 and re_pam2 contain the re pam signals
+% Assuming pulse_train33 and pulse_train44 contain the corresponding pulse trains
+% Assuming nn4 and nn44 are the time vectors for re_pam1 and re_pam2 respectively
+
+% Remove pulse train shaping
+random_signal_1_approx = re_pam1 ./ pulse_train33;
+random_signal_2_approx = re_pam2 ./ pulse_train44;
+
+% Perform interpolation to make the signals continuous
+t_continuous = linspace(min(t2), max(t2), length(t2)*10); % Increase the resolution for smoother plots
+original_signal_1 = interp1(nn4, random_signal_1_approx, t_continuous, 'pchip', 'extrap');
+original_signal_2 = interp1(nn44, random_signal_2_approx, t_continuous, 'pchip', 'extrap');
+
+% Plot the original signals
+subplot(4, 1, 3);
+plot(t_continuous, original_signal_1);
+title('Recovered Random Signal 1');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(4, 1, 4);
+plot(t_continuous, original_signal_2);
+title('Recovered Random Signal 2 )');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+
